@@ -22,7 +22,7 @@ public:
 
 	void OnEquip(const AABWeapon* LastWeapon);
 	void OnUnEquip();
-private:
+public:
 	UPROPERTY(VisibleDefaultsOnly, Category = Weapon)
 		USkeletalMeshComponent* WeaponMesh;
 

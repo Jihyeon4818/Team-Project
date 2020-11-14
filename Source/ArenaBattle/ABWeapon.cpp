@@ -12,7 +12,6 @@ AABWeapon::AABWeapon(const class FObjectInitializer& ObjectInitializer) : Super(
 	RootComponent = WeaponMesh;
 
 
-
 }
 
 void AABWeapon::SetOwningPawn(APublicCharacter* NewOwner)

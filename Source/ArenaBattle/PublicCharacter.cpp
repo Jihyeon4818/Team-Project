@@ -73,6 +73,7 @@ void APublicCharacter::SpawnDefaultInventory()
 			FActorSpawnParameters SpawnInfo;
 
 			AABWeapon* NewWeapon = GetWorld()->SpawnActor<AABWeapon>(DefaultInventoryClasses[i], SpawnInfo);
+			NewWeapon->WeaponMesh->SetHiddenInGame(true);
 			AddWeapon(NewWeapon);
 		}
 	}
