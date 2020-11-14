@@ -1,13 +1,12 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "ArenaBattle.h"
-#include "GameFramework/Character.h"
+#include "PublicCharacter.h"
 #include "ABCharacter.generated.h"
 
 UCLASS()
-class ARENABATTLE_API AABCharacter : public ACharacter
+class ARENABATTLE_API AABCharacter : public APublicCharacter
 {
 	GENERATED_BODY()
 
@@ -35,7 +34,7 @@ protected:
 	float ArmRotationSpeed = 0.0f;
 
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void PostInitializeComponents() override;
@@ -43,10 +42,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(VisibleAnywhere, Category = Camera)
-	USpringArmComponent* SpringArm;
+		USpringArmComponent* SpringArm;
 
 	UPROPERTY(VisibleAnywhere, Category = Camera)
-	UCameraComponent* Camera;
+		UCameraComponent* Camera;
 
 private:
 	void UpDown(float NewAxisValue);
@@ -57,11 +56,11 @@ private:
 	void ViewChange();
 	void Attack();
 	UFUNCTION()
-	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+		void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 private:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintreadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
-	bool IsAttacking;
+		bool IsAttacking;
 	UPROPERTY()
-	class UABAnimInstance* ABAnim;
+		class UABAnimInstance* ABAnim;
 };

@@ -1,13 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "ABCharacter.h"
 #include "ABAnimInstance.h"
 
 // Sets default values
 AABCharacter::AABCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SPRINGARM"));
@@ -19,7 +16,7 @@ AABCharacter::AABCharacter()
 	SpringArm->TargetArmLength = 400.0f;
 	SpringArm->SetRelativeRotation(FRotator(-15.0f, 00.0f, 0.0f));
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_CARDBOARD(TEXT
+	/*static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_CARDBOARD(TEXT
 	("/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"));
 
 	if (SK_CARDBOARD.Succeeded())
@@ -34,7 +31,7 @@ AABCharacter::AABCharacter()
 	if (WARRIOR_ANIM.Succeeded())
 	{
 		GetMesh()->SetAnimInstanceClass(WARRIOR_ANIM.Class);
-	}
+	}*/
 
 	SetControlMode(EControlMode::DIABLO);
 
@@ -50,7 +47,7 @@ AABCharacter::AABCharacter()
 void AABCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 void AABCharacter::SetControlMode(EControlMode NewControlMode)
@@ -89,7 +86,7 @@ void AABCharacter::SetControlMode(EControlMode NewControlMode)
 		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
 		break;
 	}
-	
+
 }
 
 // Called every frame
@@ -118,6 +115,7 @@ void AABCharacter::Tick(float DeltaTime)
 void AABCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	PlayerInputComponent->BindAction(TEXT("ChangeWeapon"), EInputEvent::IE_Pressed, this, &AABCharacter::OnChangeWeapon);
 	PlayerInputComponent->BindAction(TEXT("ViewChange"), EInputEvent::IE_Pressed, this, &AABCharacter::ViewChange);
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &AABCharacter::Attack);
@@ -131,15 +129,18 @@ void AABCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 void AABCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+	SpawnDefaultInventory();
+
 	ABAnim = Cast<UABAnimInstance>(GetMesh()->GetAnimInstance());
 	ABCHECK(nullptr != ABAnim);
 	ABAnim->OnMontageEnded.AddDynamic(this, &AABCharacter::OnAttackMontageEnded);
+
 }
 
 void AABCharacter::Attack()
 {
 	if (IsAttacking) return;
-	
+
 
 	ABAnim->PlayAttackMontage();
 	IsAttacking = true;
@@ -179,7 +180,7 @@ void AABCharacter::UpDown(float NewAxisValue)
 		DirectionToMove.X = NewAxisValue;
 		break;
 	}
-	
+
 }
 
 void AABCharacter::LeftRight(float NewAxisValue)
@@ -219,5 +220,3 @@ void AABCharacter::Turn(float NewAxisValue)
 	}
 
 }
-
-

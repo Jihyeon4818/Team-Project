@@ -8,7 +8,13 @@
 
 AABGameModeBase::AABGameModeBase()
 {
-	DefaultPawnClass = AABCharacter::StaticClass();
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Book/Animations/MyCharacter"));
+
+	if (PlayerPawnBPClass.Class != NULL)
+	{
+		DefaultPawnClass = PlayerPawnBPClass.Class;
+	}
+	//DefaultPawnClass = AABCharacter::StaticClass();
 	PlayerControllerClass = AABPlayerController::StaticClass();
 }
 

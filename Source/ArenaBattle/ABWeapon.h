@@ -1,0 +1,32 @@
+#pragma once
+
+#include "ArenaBattle.h"
+#include "GameFramework/Actor.h"
+#include "PublicCharacter.h"
+#include "Engine.h"
+#include "ABWeapon.generated.h"
+
+
+UCLASS()
+class ARENABATTLE_API AABWeapon : public AActor
+{
+	GENERATED_BODY()
+
+public:
+	// Sets default values for this actor's properties
+	AABWeapon(const class FObjectInitializer& ObjectInitializer);
+
+	void SetOwningPawn(APublicCharacter* NewOwner);
+
+	void AttachMeshToPawn();
+
+	void OnEquip(const AABWeapon* LastWeapon);
+	void OnUnEquip();
+private:
+	UPROPERTY(VisibleDefaultsOnly, Category = Weapon)
+		USkeletalMeshComponent* WeaponMesh;
+
+protected:
+	class APublicCharacter* MyPawn;
+
+};
