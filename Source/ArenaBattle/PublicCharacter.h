@@ -18,9 +18,17 @@ public:
 	FName GetWeaponAttachPoint() const;
 
 	void EquipWeapon(class AABWeapon* Weapon);
+
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class AArrow> ArrowClass;
+
+
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = Inventory)
-		FName WeaponAttachPoint;
+	FName WeaponAttachPoint;
+	UPROPERTY()
+	class UABAnimInstance* ABAnim;
 
 	TArray<class AABWeapon*> Inventory;
 
@@ -36,4 +44,6 @@ protected:
 		TArray<TSubclassOf<class AABWeapon>> DefaultInventoryClasses;
 
 	void SpawnDefaultInventory();
+
+	void OnShoot();
 };

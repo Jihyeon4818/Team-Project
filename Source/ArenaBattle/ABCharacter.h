@@ -40,6 +40,7 @@ public:
 	virtual void PostInitializeComponents() override;
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintreadOnly, Category = Camera)
 		USpringArmComponent* SpringArm;
@@ -55,12 +56,31 @@ private:
 
 	void ViewChange();
 	void Attack();
+	void SwordAttack();
 	UFUNCTION()
-		void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	void AttackStartComboState();
+	void AttackEndComboState();
+	void AttackCheck();
 
 private:
-	UPROPERTY(VisibleDefaultsOnly, BlueprintreadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
-		bool IsAttacking;
-	UPROPERTY()
-		class UABAnimInstance* ABAnim;
+	UPROPERTY(VisibleInstanceOnly, BlueprintreadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool IsAttacking;
+
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintreadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool CanNextCombo;
+	UPROPERTY(VisibleInstanceOnly, BlueprintreadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool IsComboInputOn;
+	UPROPERTY(VisibleInstanceOnly, BlueprintreadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	int32 CurrentCombo;
+	UPROPERTY(VisibleInstanceOnly, BlueprintreadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	int32 MaxCombo;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintreadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	float AttackRange;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintreadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	float AttackRadius;
 };

@@ -1,5 +1,8 @@
 #include "PublicCharacter.h"
 #include "ABWeapon.h"
+#include "Arrow.h"
+#include "ABAnimInstance.h"
+#include "Engine.h"
 
 // Sets default values
 APublicCharacter::APublicCharacter()
@@ -91,4 +94,20 @@ void APublicCharacter::OnChangeWeapon()
 	AABWeapon* NextWeapon = Inventory[(CurrentWeaponIndex + 1) % Inventory.Num()];
 
 	EquipWeapon(NextWeapon);
+}
+
+void APublicCharacter::OnShoot()
+{
+	if (ArrowClass != NULL)
+	{
+		const FRotator SpawnRotation = GetActorRotation();
+		const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(FVector(100.0f, 30.0f, 10.0f));
+
+		UWorld* const World = GetWorld();
+		if (World != NULL)
+		{
+			ABAnim->PlayArrowMontage();
+			World->SpawnActor<AArrow>(ArrowClass, SpawnLocation, SpawnRotation);
+		}
+	}
 }
