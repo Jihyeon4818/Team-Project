@@ -50,6 +50,8 @@ AABCharacter::AABCharacter()
 
 	AttackRange = 200.0f;
 	AttackRadius = 50.0f;
+
+	Health = 100.0f;
 }
 
 void AABCharacter::AttackStartComboState()
@@ -208,7 +210,7 @@ void AABCharacter::AttackCheck()
 		{
 			ABLOG(Warning, TEXT("Hit Acttor Name: %s"), *HitResult.Actor->GetName());
 			FDamageEvent DamageEvent;
-			HitResult.Actor->TakeDamage(50.0f, DamageEvent, GetController(), this);
+			HitResult.Actor->TakeDamage(10.0f, DamageEvent, GetController(), this);
 		}
 	}
 }
@@ -241,10 +243,12 @@ float AABCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	ABLOG(Warning, TEXT("Actor: %s took Damage : %f"), *GetName(), FinalDamage);
 
-	if (FinalDamage > 0.0f)
+	Health -= FinalDamage;
+
+	if (Health <= 0.0f)
 	{
-		//ABAnim->SetDeadAnim();
-		//SetActorEnableCollision(false);
+		ABAnim->SetDeadAnim();
+		SetActorEnableCollision(false);
 	}
 	return FinalDamage;
 }
