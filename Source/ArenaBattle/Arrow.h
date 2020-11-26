@@ -19,7 +19,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Inventory)
 	FName HitName;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
+	UPROPERTY(VisibleDefaultsOnly, Category = Sphere)
 	class USphereComponent* ArrowCollision;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))

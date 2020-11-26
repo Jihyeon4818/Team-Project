@@ -42,11 +42,12 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintreadOnly, Category = Camera)
-		USpringArmComponent* SpringArm;
 
 	UPROPERTY(VisibleAnywhere, BlueprintreadOnly, Category = Camera)
-		UCameraComponent* Camera;
+	USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere, BlueprintreadOnly, Category = Camera)
+	UCameraComponent* Camera;
 
 private:
 	void UpDown(float NewAxisValue);
@@ -56,6 +57,9 @@ private:
 
 	void ViewChange();
 	void Attack();
+	
+
+	void OnShoot();
 	void SwordAttack();
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
@@ -85,5 +89,8 @@ private:
 	float AttackRadius;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintreadOnly, Category = Damage, Meta = (AllowPrivateAccess = true))
-		float Health;
+	float Health;
+
+	UPROPERTY(EditDefaultsOnly, Category = Arrow)
+	TSubclassOf<class AArrow> ArrowClass;
 };

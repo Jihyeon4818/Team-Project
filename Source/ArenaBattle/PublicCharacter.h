@@ -19,10 +19,7 @@ public:
 
 	void EquipWeapon(class AABWeapon* Weapon);
 
-	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-	TSubclassOf<class AArrow> ArrowClass;
-
-
+	
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = Inventory)

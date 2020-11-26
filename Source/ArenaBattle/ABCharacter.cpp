@@ -1,5 +1,6 @@
 #include "ABCharacter.h"
 #include "ABAnimInstance.h"
+#include "Arrow.h"
 #include "DrawDebugHelpers.h"
 
 // Sets default values
@@ -216,28 +217,6 @@ void AABCharacter::AttackCheck()
 }
 
 
-
-void AABCharacter::SwordAttack()
-{
-	if (IsAttacking)
-	{
-		ABCHECK(FMath::IsWithinInclusive<int32>(CurrentCombo, 1, MaxCombo));
-		if (CanNextCombo)
-		{
-			IsComboInputOn = true;
-		}
-	}
-
-	else
-	{
-		ABCHECK(CurrentCombo == 0);
-		AttackStartComboState();
-		ABAnim->PlayAttackMontage();
-		ABAnim->JumpToAttackMontageSection(CurrentCombo);
-		IsAttacking = true;
-	}
-}
-
 float AABCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
 	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -333,16 +312,59 @@ void AABCharacter::Attack()
 {
 	if (CurrentWeapon == Inventory[1])
 	{
-		OnShoot();
+		SwordAttack();
 	}
 
 	else if (CurrentWeapon == Inventory[2])
 	{
-		OnShoot();
+		
 	}
 
 	else if (CurrentWeapon)
 	{
-		SwordAttack();
+		OnShoot();
 	}
+}
+
+void AABCharacter::SwordAttack()
+{
+	if (IsAttacking)
+	{
+		ABCHECK(FMath::IsWithinInclusive<int32>(CurrentCombo, 1, MaxCombo));
+		if (CanNextCombo)
+		{
+			IsComboInputOn = true;
+		}
+	}
+
+	else
+	{
+		ABCHECK(CurrentCombo == 0);
+		AttackStartComboState();
+		ABAnim->PlayAttackMontage();
+		ABAnim->JumpToAttackMontageSection(CurrentCombo);
+		IsAttacking = true;
+	}
+}
+
+void AABCharacter::OnShoot()
+{
+	if (!IsAttacking)
+	{
+		ABCHECK(CurrentCombo == 0);
+		IsAttacking = true;
+		if (ArrowClass != NULL)
+		{
+			const FRotator SpawnRotation = GetActorRotation();
+			const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(FVector(100.0f, 30.0f, 10.0f));
+
+			UWorld* const World = GetWorld();
+			if (World != NULL)
+			{
+				ABAnim->PlayArrowMontage();
+				World->SpawnActor<AArrow>(ArrowClass, SpawnLocation, SpawnRotation);
+			}
+		}
+	}
+
 }
