@@ -10,30 +10,37 @@
 // Sets default values
 AArrow::AArrow()
 {
-	ArrowCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Arrow Comp"));
-	ArrowCollision->InitSphereRadius(20.0f);
-	ArrowCollision->BodyInstance.SetCollisionProfileName("Arrow");
+	ArrowCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("Arrow Comp"));
+	
+	
 	//ArrowCollision->OnComponentBeginOverlap.AddDynamic(this, &AArrow::OnOverlapBegin);
+	ArrowCollision->OnComponentBeginOverlap.AddDynamic(this, &AArrow::OnComponentBeginOverlap);
 	RootComponent = ArrowCollision;
+	ArrowMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ArrowMesh"));
+	ArrowMesh->SetupAttachment(RootComponent);
 
+	ArrowCollision->SetBoxExtent(FVector(40.0f, 42.0f, 30.0f));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>SK_WEAPON(
+		TEXT("/Game/Weapon/Blade_BohntaPick/SK_Blade_BohntaPick.SK_Blade_BohntaPick"));
+	if (SK_WEAPON.Succeeded())
+	{
+		ArrowMesh->SetSkeletalMesh(SK_WEAPON.Object);
+	}
+	ArrowCollision->SetCollisionProfileName("Arrow");
+	
+	
 	ArrowMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ArrowComp"));
 	ArrowMovement->UpdatedComponent = ArrowCollision;
 	ArrowMovement->InitialSpeed = 3000.0f;
 	ArrowMovement->MaxSpeed = 3000.0f;
 	ArrowMovement->bRotationFollowsVelocity = false;
-	InitialLifeSpan = 3.0f;
+	
 }
 
-void AArrow::OnOverlapBegin(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AArrow::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	if (OtherActor && (OtherActor != this) && OtherComp)
-	{
-		Destroy();
-		if (OtherActor->IsA(APublicCharacter::StaticClass()))
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Black, "Collision");
-			UGameplayStatics::ApplyPointDamage(SweepResult.Actor.Get(), 1, -SweepResult.ImpactNormal, SweepResult, NULL, this, UDamageType::StaticClass());
-		}
-	}
+	ABLOG_S(Warning);
+	Destroy();
+	UGameplayStatics::ApplyPointDamage(SweepResult.Actor.Get(), 200, -SweepResult.ImpactNormal, SweepResult, NULL, this, UDamageType::StaticClass());
 }
-
