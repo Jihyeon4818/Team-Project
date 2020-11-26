@@ -16,7 +16,7 @@ public:
 	// Sets default values for this actor's properties
 	AArrow();
 
-	//virtual void PostInitializeComponents() override;
+	virtual void PostInitializeComponents() override;
 
 	UPROPERTY(EditDefaultsOnly, Category = Inventory)
 	FName HitName;
@@ -30,12 +30,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	class UProjectileMovementComponent* ArrowMovement;
 
-	/*UFUNCTION()
-	void OnOverlapBegin(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);*/
 	UFUNCTION()
 	void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 			int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
-	FORCEINLINE class UBoxComponent* GetArrowCollision() const { return ArrowCollision; }
-	//FORCEINLINE class UProjectileMovementComponent* GetArrowMovement() const { return ArrowMovement; }
+	
 
 };

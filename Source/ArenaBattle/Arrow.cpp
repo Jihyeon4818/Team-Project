@@ -12,8 +12,6 @@ AArrow::AArrow()
 {
 	ArrowCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("Arrow Comp"));
 	
-	
-	//ArrowCollision->OnComponentBeginOverlap.AddDynamic(this, &AArrow::OnOverlapBegin);
 	ArrowCollision->OnComponentBeginOverlap.AddDynamic(this, &AArrow::OnComponentBeginOverlap);
 	RootComponent = ArrowCollision;
 	ArrowMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ArrowMesh"));
@@ -35,6 +33,12 @@ AArrow::AArrow()
 	ArrowMovement->MaxSpeed = 3000.0f;
 	ArrowMovement->bRotationFollowsVelocity = false;
 	
+}
+
+void AArrow::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	SetLifeSpan(2.0f);
 }
 
 void AArrow::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,

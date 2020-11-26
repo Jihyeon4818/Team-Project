@@ -347,29 +347,6 @@ void AABCharacter::SwordAttack()
 	}
 }
 
-/*void AABCharacter::OnShoot()
-{
-	if (!IsAttacking)
-	{
-		ABCHECK(CurrentCombo == 0);
-		IsAttacking = true;
-		if (ArrowClass != NULL)
-		{
-			const FRotator SpawnRotation = GetActorRotation();
-			const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(FVector(100.0f, 30.0f, 10.0f));
-
-			UWorld* const World = GetWorld();
-			if (World != NULL)
-			{
-				ABAnim->PlayArrowMontage();
-				World->SpawnActor<AArrow>(ArrowClass, SpawnLocation, SpawnRotation);
-			}
-		}
-	}
-
-}*/
-
-
 void AABCharacter::OnShoot()
 {
 	if (!IsAttacking)
@@ -391,3 +368,6 @@ void AABCharacter::OnShoot()
 	}
 
 }
+
+
+
