@@ -5,7 +5,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "PublicCharacter.h"
 #include "Engine.h"
-
+#include "Components/PrimitiveComponent.h"
 
 // Sets default values
 AArrow::AArrow()
@@ -17,20 +17,14 @@ AArrow::AArrow()
 	ArrowMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ArrowMesh"));
 	ArrowMesh->SetupAttachment(RootComponent);
 
-	ArrowCollision->SetBoxExtent(FVector(40.0f, 42.0f, 30.0f));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh>SK_WEAPON(
-		TEXT("/Game/Weapon/Blade_BohntaPick/SK_Blade_BohntaPick.SK_Blade_BohntaPick"));
-	if (SK_WEAPON.Succeeded())
-	{
-		ArrowMesh->SetSkeletalMesh(SK_WEAPON.Object);
-	}
+	ArrowCollision->SetBoxExtent(FVector(35.0f,5.0f,5.0f));
 	ArrowCollision->SetCollisionProfileName("Arrow");
-	
 	
 	ArrowMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ArrowComp"));
 	ArrowMovement->UpdatedComponent = ArrowCollision;
 	ArrowMovement->InitialSpeed = 3000.0f;
 	ArrowMovement->MaxSpeed = 3000.0f;
+	ArrowMovement->ProjectileGravityScale = 0.0f;
 	ArrowMovement->bRotationFollowsVelocity = false;
 	
 }
@@ -38,13 +32,15 @@ AArrow::AArrow()
 void AArrow::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-	SetLifeSpan(2.0f);
+	SetLifeSpan(1.0f);
 }
 
 void AArrow::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	ABLOG_S(Warning);
-	Destroy();
-	UGameplayStatics::ApplyPointDamage(SweepResult.Actor.Get(), 200, -SweepResult.ImpactNormal, SweepResult, NULL, this, UDamageType::StaticClass());
+	if (OtherActor && (OtherActor != this) && OtherComp)
+	{
+		UGameplayStatics::ApplyPointDamage(SweepResult.Actor.Get(), 200, -SweepResult.ImpactNormal, SweepResult, NULL, this, UDamageType::StaticClass());
+		Destroy();
+	}
 }

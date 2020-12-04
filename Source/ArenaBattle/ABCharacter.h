@@ -60,6 +60,7 @@ private:
 	
 
 	void OnShoot();
+	void OnMagic();
 	void SwordAttack();
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
@@ -91,6 +92,9 @@ private:
 	UPROPERTY(VisibleInstanceOnly, BlueprintreadOnly, Category = Damage, Meta = (AllowPrivateAccess = true))
 	float Health;
 
-	UPROPERTY(EditDefaultsOnly, Category = Arrow)
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
 	TSubclassOf<class AArrow> ArrowClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class AMagicBall> MagicBallClass;
 };

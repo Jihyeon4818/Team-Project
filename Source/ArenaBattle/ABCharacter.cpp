@@ -1,6 +1,7 @@
 #include "ABCharacter.h"
 #include "ABAnimInstance.h"
 #include "Arrow.h"
+#include "MagicBall.h"
 #include "DrawDebugHelpers.h"
 
 // Sets default values
@@ -317,12 +318,12 @@ void AABCharacter::Attack()
 
 	else if (CurrentWeapon == Inventory[2])
 	{
-		
+		OnShoot();
 	}
 
 	else if (CurrentWeapon)
 	{
-		OnShoot();
+		OnMagic();
 	}
 }
 
@@ -368,6 +369,29 @@ void AABCharacter::OnShoot()
 	}
 
 }
+
+void AABCharacter::OnMagic()
+{
+	if (!IsAttacking)
+	{
+		ABCHECK(CurrentCombo == 0);
+		IsAttacking = true;
+		if (ArrowClass != NULL)
+		{
+			const FRotator SpawnRotation = GetActorRotation();
+			const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(FVector(100.0f, 30.0f, 10.0f));
+
+			UWorld* const World = GetWorld();
+			if (World != NULL)
+			{
+				ABAnim->PlayArrowMontage();
+				World->SpawnActor<AMagicBall>(MagicBallClass, SpawnLocation, SpawnRotation);
+			}
+		}
+	}
+
+}
+
 
 
 
