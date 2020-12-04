@@ -35,8 +35,8 @@ AABCharacter::AABCharacter()
 	{
 		GetMesh()->SetAnimInstanceClass(WARRIOR_ANIM.Class);
 	}*/
-
-	SetControlMode(EControlMode::DIABLO);
+	
+	SetControlMode(EControlMode::GTA);
 
 	ArmLengthSpeed = 3.0f;
 	ArmRotationSpeed = 10.0f;
@@ -44,6 +44,8 @@ AABCharacter::AABCharacter()
 	// 점프 하는 값을 800으로 설정
 	GetCharacterMovement()->JumpZVelocity = 800.0f;
 	IsAttacking = false;
+	IsMoving = true;
+	IsCharging = false;
 
 	MaxCombo = 4;
 	AttackEndComboState();
@@ -87,7 +89,9 @@ void AABCharacter::SetControlMode(EControlMode NewControlMode)
 	case EControlMode::GTA:
 		//SpringArm->TargetArmLength = 450.0f;
 		//SpringArm->SetRelativeRotation(FRotator::ZeroRotator);
+		//GetController()->SetControlRotation(GetActorRotation());
 		ArmLengthTo = 450.0f;
+		ArmRotationTo = FRotator(-45.0f, 0.0f, 0.0f);
 		SpringArm->bUsePawnControlRotation = true;
 		SpringArm->bInheritPitch = true;
 		SpringArm->bInheritRoll = true;
@@ -145,7 +149,7 @@ void AABCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAction(TEXT("ChangeWeapon"), EInputEvent::IE_Pressed, this, &AABCharacter::OnChangeWeapon);
 	PlayerInputComponent->BindAction(TEXT("ViewChange"), EInputEvent::IE_Pressed, this, &AABCharacter::ViewChange);
-	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &AABCharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &AABCharacter::Attack);
 
 	PlayerInputComponent->BindAxis(TEXT("UpDown"), this, &AABCharacter::UpDown);
@@ -241,6 +245,7 @@ void AABCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted
 }
 
 
+
 void AABCharacter::ViewChange()
 {
 	switch (CurrentControlMode)
@@ -258,55 +263,73 @@ void AABCharacter::ViewChange()
 
 void AABCharacter::UpDown(float NewAxisValue)
 {
-	//ABLOG(Warning, TEXT("%f"), NewAxisValue);
-	switch (CurrentControlMode)
+	if (IsMoving== true)
 	{
-	case EControlMode::GTA:
-		AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X), NewAxisValue);
-		break;
-	case EControlMode::DIABLO:
-		DirectionToMove.X = NewAxisValue;
-		break;
+		//ABLOG(Warning, TEXT("%f"), NewAxisValue);
+		switch (CurrentControlMode)
+		{
+		case EControlMode::GTA:
+			AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X), NewAxisValue);
+			break;
+		case EControlMode::DIABLO:
+			DirectionToMove.X = NewAxisValue;
+			break;
+		}
 	}
-
 }
 
 void AABCharacter::LeftRight(float NewAxisValue)
 {
-	//ABLOG(Warning, TEXT("%f"), NewAxisValue);
-	switch (CurrentControlMode)
+	if (IsMoving == true)
 	{
-	case EControlMode::GTA:
-		AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::Y), NewAxisValue);
-		break;
-	case EControlMode::DIABLO:
-		DirectionToMove.Y = NewAxisValue;
-		break;
+		//ABLOG(Warning, TEXT("%f"), NewAxisValue);
+		switch (CurrentControlMode)
+		{
+		case EControlMode::GTA:
+			AddMovementInput(FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::Y), NewAxisValue);
+			break;
+		case EControlMode::DIABLO:
+			DirectionToMove.Y = NewAxisValue;
+			break;
+		}
 	}
 }
 
 void AABCharacter::LookUp(float NewAxisValue)
 {
-	//ABLOG(Warning, TEXT("%f"), NewAxisValue);
-	switch (CurrentControlMode)
-	{
-	case EControlMode::GTA:
-		AddControllerPitchInput(NewAxisValue);
-		break;
-	}
+
+		//ABLOG(Warning, TEXT("%f"), NewAxisValue);
+		switch (CurrentControlMode)
+		{
+		case EControlMode::GTA:
+			AddControllerPitchInput(NewAxisValue);
+			break;
+		}
+	
 
 }
 
 void AABCharacter::Turn(float NewAxisValue)
 {
-	//ABLOG(Warning, TEXT("%f"), NewAxisValue);
-	switch (CurrentControlMode)
-	{
-	case EControlMode::GTA:
-		AddControllerYawInput(NewAxisValue);
-		break;
-	}
+	
+		//ABLOG(Warning, TEXT("%f"), NewAxisValue);
+		switch (CurrentControlMode)
+		{
+		case EControlMode::GTA:
+			AddControllerYawInput(NewAxisValue);
+			break;
+		}
+	
 
+}
+
+void AABCharacter::Jump()
+{
+	if (IsMoving == true)
+	{
+		bPressedJump = true;
+		JumpKeyHoldTime = 0.0f;
+	}
 }
 
 void AABCharacter::Attack()
@@ -323,7 +346,14 @@ void AABCharacter::Attack()
 
 	else if (CurrentWeapon)
 	{
-		OnMagic();
+		if (IsCharging)
+		{
+			OnMagic();
+		}
+		else
+		{
+			MagicCharging();
+		}
 	}
 }
 
@@ -370,6 +400,29 @@ void AABCharacter::OnShoot()
 
 }
 
+void AABCharacter::MagicCharging()
+{
+	if (!IsAttacking)
+	{
+		ABCHECK(CurrentCombo == 0);
+		IsAttacking = true;
+		if (ArrowClass != NULL)
+		{
+			const FRotator SpawnRotation = GetActorRotation();
+			const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(FVector(80.0f, 30.0f, 10.0f));
+
+			UWorld* const World = GetWorld();
+			if (World != NULL)
+			{
+				ABAnim->PlayChargingMontage();
+				Ball = World->SpawnActor<AChargingBall>(ChargingBallClass, SpawnLocation, SpawnRotation);
+				IsMoving = false;
+				IsCharging = true;
+			}
+		}
+	}
+}
+
 void AABCharacter::OnMagic()
 {
 	if (!IsAttacking)
@@ -379,19 +432,33 @@ void AABCharacter::OnMagic()
 		if (ArrowClass != NULL)
 		{
 			const FRotator SpawnRotation = GetActorRotation();
-			const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(FVector(100.0f, 30.0f, 10.0f));
+			const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(FVector(80.0f, 30.0f, 10.0f));
 
 			UWorld* const World = GetWorld();
 			if (World != NULL)
 			{
-				ABAnim->PlayArrowMontage();
+				Ball->Destroy();
+				ABAnim->PlayMagicMontage();
 				World->SpawnActor<AMagicBall>(MagicBallClass, SpawnLocation, SpawnRotation);
+				IsCharging = false;
+				IsMoving = true;
+
 			}
 		}
 	}
 
 }
 
+void AABCharacter::OnChangeWeapon()
+{
+	if (!IsAttacking)
+	{
+		const int32 CurrentWeaponIndex = Inventory.IndexOfByKey(CurrentWeapon);
 
+		AABWeapon* NextWeapon = Inventory[(CurrentWeaponIndex + 1) % Inventory.Num()];
+
+		EquipWeapon(NextWeapon);
+	}
+}
 
 

@@ -87,12 +87,4 @@ void APublicCharacter::SpawnDefaultInventory()
 	}
 }
 
-void APublicCharacter::OnChangeWeapon()
-{
-	const int32 CurrentWeaponIndex = Inventory.IndexOfByKey(CurrentWeapon);
-
-	AABWeapon* NextWeapon = Inventory[(CurrentWeaponIndex + 1) % Inventory.Num()];
-
-	EquipWeapon(NextWeapon);
-}
 

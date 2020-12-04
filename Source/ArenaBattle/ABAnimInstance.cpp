@@ -23,6 +23,20 @@ UABAnimInstance::UABAnimInstance()
 	{
 		ArrowMontage = ARROW_MONTAGE.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> Magic_MONTAGE(TEXT(
+		"/Game/Book/Animations/Magic_Montage.Magic_Montage"));
+	if (Magic_MONTAGE.Succeeded())
+	{
+		MagicMontage = Magic_MONTAGE.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> Charging_MONTAGE(TEXT(
+		"/Game/Book/Animations/Charging_Montage.Charging_Montage"));
+	if (Charging_MONTAGE.Succeeded())
+	{
+		ChargingMontage = Charging_MONTAGE.Object;
+	}
 }
 
 void UABAnimInstance::PlayAttackMontage()
@@ -37,6 +51,18 @@ void UABAnimInstance::PlayArrowMontage()
 	ABCHECK(!IsDead);
 	Montage_Play(ArrowMontage, 1.0f);
 
+}
+
+void UABAnimInstance::PlayMagicMontage()
+{
+	ABCHECK(!IsDead);
+	Montage_Play(MagicMontage, 1.0f);
+}
+
+void UABAnimInstance::PlayChargingMontage()
+{
+	ABCHECK(!IsDead);
+	Montage_Play(ChargingMontage, 1.0f);
 }
 
 void UABAnimInstance::NativeUpdateAnimation(float DeltaSeconds)

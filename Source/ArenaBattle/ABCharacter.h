@@ -3,6 +3,7 @@
 
 #include "ArenaBattle.h"
 #include "PublicCharacter.h"
+#include "ChargingBall.h"
 #include "ABCharacter.generated.h"
 
 UCLASS()
@@ -54,17 +55,18 @@ private:
 	void LeftRight(float NewAxisValue);
 	void LookUp(float NewAxisValue);
 	void Turn(float NewAxisValue);
+	void Jump();
 
 	void ViewChange();
 	void Attack();
-	
+	void OnChangeWeapon();
 
 	void OnShoot();
 	void OnMagic();
+	void MagicCharging();
 	void SwordAttack();
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
-
 	void AttackStartComboState();
 	void AttackEndComboState();
 	void AttackCheck();
@@ -72,6 +74,9 @@ private:
 private:
 	UPROPERTY(VisibleInstanceOnly, BlueprintreadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool IsAttacking;
+	
+	bool IsMoving;
+	bool IsCharging;
 
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintreadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
@@ -97,4 +102,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
 	TSubclassOf<class AMagicBall> MagicBallClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class AChargingBall> ChargingBallClass;
+
+	AChargingBall* Ball;
 };

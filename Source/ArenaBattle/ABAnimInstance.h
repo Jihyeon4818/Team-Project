@@ -22,6 +22,8 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	void PlayAttackMontage();
 	void PlayArrowMontage();
+	void PlayMagicMontage();
+	void PlayChargingMontage();
 
 	void JumpToAttackMontageSection(int32 NewSection);
 
@@ -47,6 +49,12 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintreadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* ArrowMontage;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintreadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* MagicMontage;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintreadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* ChargingMontage;
 
 	UPROPERTY(EditAnyWhere, BlueprintreadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	bool IsDead;

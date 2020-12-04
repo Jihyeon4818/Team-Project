@@ -27,6 +27,7 @@ protected:
 	UPROPERTY()
 	class UABAnimInstance* ABAnim;
 
+
 	TArray<class AABWeapon*> Inventory;
 
 	class AABWeapon* CurrentWeapon;
@@ -35,7 +36,7 @@ protected:
 
 	void SetCurrentWeapon(class AABWeapon* NewWeapon, class AABWeapon* LastWeapon);
 
-	void OnChangeWeapon();
+
 
 	UPROPERTY(EditDefaultsOnly, Category = Inventory)
 		TArray<TSubclassOf<class AABWeapon>> DefaultInventoryClasses;
