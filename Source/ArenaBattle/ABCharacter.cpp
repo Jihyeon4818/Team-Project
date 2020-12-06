@@ -55,7 +55,7 @@ AABCharacter::AABCharacter()
 	AttackRange = 200.0f;
 	AttackRadius = 50.0f;
 
-	Health = 100.0f;
+	Health = 10000.0f;
 }
 
 void AABCharacter::AttackStartComboState()
