@@ -125,7 +125,6 @@ void AABCharacter::SetControlMode(EControlMode NewControlMode)
 void AABCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	SpringArm->TargetArmLength = FMath::FInterpTo(SpringArm->TargetArmLength, ArmLengthTo, DeltaTime, ArmRotationSpeed);
 
 	switch (CurrentControlMode)

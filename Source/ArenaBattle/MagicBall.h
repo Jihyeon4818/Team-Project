@@ -18,6 +18,8 @@ public:
 
 	virtual void PostInitializeComponents() override;
 
+	virtual void Tick(float DeltaTime) override;
+
 	UPROPERTY(EditDefaultsOnly, Category = Inventory)
 		FName HitName;
 

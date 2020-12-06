@@ -10,9 +10,11 @@
 // Sets default values
 AMagicBall::AMagicBall()
 {
+
+	PrimaryActorTick.bCanEverTick = true;
 	MagicBallCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("MagicBall Comp"));
 
-	MagicBallCollision->OnComponentBeginOverlap.AddDynamic(this, &AMagicBall::BombOverlap);
+	//MagicBallCollision->OnComponentBeginOverlap.AddDynamic(this, &AMagicBall::BombOverlap);
 	RootComponent = MagicBallCollision;
 	MagicBallMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MagicBallMesh"));
 	MagicBallMesh->SetupAttachment(RootComponent);
@@ -35,7 +37,19 @@ AMagicBall::AMagicBall()
 void AMagicBall::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-	SetLifeSpan(1.0f);
+	SetLifeSpan(1.5f);
+}
+
+void AMagicBall::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	ABLOG(Warning, TEXT("Actor:  took Damage :"));
+	if (GetLifeSpan() < 0.5f)
+	{
+		FVector BombLocation = MagicBallCollision->GetComponentLocation();
+		UGameplayStatics::ApplyRadialDamage(GetWorld(), 100.0f, BombLocation, 400.0f, nullptr, TArray<AActor*>(), this, false, ECC_Visibility);
+		Destroy();
+	}
 }
 
 
