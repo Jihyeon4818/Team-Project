@@ -18,6 +18,8 @@ public:
 
 	virtual void PostInitializeComponents() override;
 
+
+
 	UPROPERTY(EditDefaultsOnly, Category = Inventory)
 	FName HitName;
 
@@ -34,5 +36,7 @@ public:
 	void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 			int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 	
+	UPROPERTY(VisibleAnywhere, Category = Effect)
+		UParticleSystemComponent* Effect;
 
 };

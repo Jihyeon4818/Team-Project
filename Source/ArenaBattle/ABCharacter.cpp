@@ -403,8 +403,9 @@ void AABCharacter::OnShoot()
 
 void AABCharacter::MagicCharging()
 {
-	if (!IsAttacking)
+	if (!IsAttacking&&!GetMovementComponent()->IsFalling())
 	{
+		
 		ABCHECK(CurrentCombo == 0);
 		IsAttacking = true;
 		if (ArrowClass != NULL)

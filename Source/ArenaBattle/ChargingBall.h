@@ -16,6 +16,8 @@ public:
 	// Sets default values for this actor's properties
 	AChargingBall();
 
+	virtual void PostInitializeComponents() override;
+
 	UPROPERTY(EditDefaultsOnly, Category = Inventory)
 	FName HitName;
 
@@ -28,7 +30,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	class UProjectileMovementComponent* ChargingBallMovement;
 
-	
+	UPROPERTY(VisibleAnywhere, Category = Effect)
+		UParticleSystemComponent* Effect;
 
 
 };
