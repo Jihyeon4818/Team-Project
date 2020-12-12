@@ -43,22 +43,22 @@ void AMagicBall::PostInitializeComponents()
 void AMagicBall::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	ABLOG(Warning, TEXT("Actor:  took Damage :"));
+	/*ABLOG_S(Warning, TEXT("Actor:  took Damage :"));
 	if (GetLifeSpan() < 0.5f)
 	{
 		FVector BombLocation = MagicBallCollision->GetComponentLocation();
 		UGameplayStatics::ApplyRadialDamage(GetWorld(), 100.0f, BombLocation, 400.0f, nullptr, TArray<AActor*>(), this, false, ECC_Visibility);
 		Destroy();
-	}
+	}*/
 }
 
 
 void AMagicBall::BombOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	FVector BombLocation = MagicBallCollision->GetComponentLocation();
+	/*FVector BombLocation = MagicBallCollision->GetComponentLocation();
 	UGameplayStatics::ApplyRadialDamage(GetWorld(), 100.0f, BombLocation, 400.0f, nullptr, TArray<AActor*>(), this, false,ECC_Visibility);
-	Destroy();
+	Destroy();*/
 }
 
 
