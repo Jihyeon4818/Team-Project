@@ -59,6 +59,13 @@ void AMagicBall::Tick(float DeltaTime)
 	{
 		FVector BombLocation = MagicBallCollision->GetComponentLocation();
 		UGameplayStatics::ApplyRadialDamage(GetWorld(), 100.0f, BombLocation, 600.0f, nullptr, TArray<AActor*>(), this, false, ECC_Visibility);
+		const FRotator SpawnRotation = GetActorRotation();
+		const FVector SpawnLocation = GetActorLocation();
+		UWorld* const World = GetWorld();
+		if (World != NULL)
+		{
+			World->SpawnActor<ABombBall>(BombBallClass, SpawnLocation, SpawnRotation);
+		};
 		Destroy();
 	}
 }

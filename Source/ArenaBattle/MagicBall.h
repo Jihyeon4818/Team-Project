@@ -3,6 +3,7 @@
 #pragma once
 
 #include "ArenaBattle.h"
+#include "BombBall.h"
 #include "GameFramework/Actor.h"
 #include "MagicBall.generated.h"
 
@@ -20,14 +21,15 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditDefaultsOnly, Category = Inventory)
-		FName HitName;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Box)
 		class UBoxComponent* MagicBallCollision;
 
 	UPROPERTY(VisibleAnywhere, Category = Mesh)
 		USkeletalMeshComponent* MagicBallMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class ABombBall> BombBallClass;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 		class UProjectileMovementComponent* MagicBallMovement;

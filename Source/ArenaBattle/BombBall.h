@@ -4,25 +4,24 @@
 
 #include "ArenaBattle.h"
 #include "GameFramework/Actor.h"
-#include "ChargingBall.generated.h"
-
+#include "BombBall.generated.h"
 
 UCLASS()
-class ARENABATTLE_API AChargingBall : public AActor
+class ARENABATTLE_API ABombBall : public AActor
 {
 	GENERATED_BODY()
-
-public:
+	
+public:	
 	// Sets default values for this actor's properties
-	AChargingBall();
+	ABombBall();
 
 	virtual void PostInitializeComponents() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
-	class UProjectileMovementComponent* ChargingBallMovement;
+		class UProjectileMovementComponent* BombBallMovement;
 
 	UPROPERTY(VisibleAnywhere, Category = Effect)
-		UParticleSystemComponent* Effect;
+	UParticleSystemComponent* Effect;
 
-
+	void OnEffectFinished(class UParticleSystemComponent* PSystem);
 };

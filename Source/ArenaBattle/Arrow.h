@@ -19,10 +19,6 @@ public:
 	virtual void PostInitializeComponents() override;
 
 
-
-	UPROPERTY(EditDefaultsOnly, Category = Inventory)
-	FName HitName;
-
 	UPROPERTY(VisibleDefaultsOnly, Category = Box)
 	class UBoxComponent* ArrowCollision;
 
