@@ -3,7 +3,7 @@
 
 #include "ChargingBall.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "PublicCharacter.h"
+
 #include "Engine.h"
 
 
