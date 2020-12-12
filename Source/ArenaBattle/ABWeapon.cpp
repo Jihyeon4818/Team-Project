@@ -14,7 +14,7 @@ AABWeapon::AABWeapon(const class FObjectInitializer& ObjectInitializer) : Super(
 
 }
 
-void AABWeapon::SetOwningPawn(AABCharacter* NewOwner)
+void AABWeapon::SetOwningPawn(APublicCharacter* NewOwner)
 {
 	if (MyPawn != NewOwner)
 	{

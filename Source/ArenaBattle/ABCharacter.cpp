@@ -1,10 +1,8 @@
 #include "ABCharacter.h"
+#include "ABAnimInstance.h"
+#include "Arrow.h"
 #include "MagicBall.h"
 #include "DrawDebugHelpers.h"
-#include "ABWeapon.h"
-#include "Arrow.h"
-#include "ABAnimInstance.h"
-#include "Engine.h"
 
 // Sets default values
 AABCharacter::AABCharacter()
@@ -462,78 +460,4 @@ void AABCharacter::OnChangeWeapon()
 	}
 }
 
-USkeletalMeshComponent* AABCharacter::GetSpecificPawnMesh() const
-{
-	return GetMesh();
-}
-
-FName AABCharacter::GetWeaponAttachPoint() const
-{
-	return WeaponAttachPoint;
-}
-
-void AABCharacter::AddWeapon(AABWeapon* Weapon)
-{
-	if (Weapon)
-	{
-		Inventory.AddUnique(Weapon);
-	}
-}
-
-void AABCharacter::SetCurrentWeapon(class AABWeapon* NewWeapon, class AABWeapon* LastWeapon)
-{
-	AABWeapon* LocalLastWeapon = NULL;
-
-	if (LastWeapon != NULL)
-	{
-		LocalLastWeapon = LastWeapon;
-	}
-	else if (NewWeapon != CurrentWeapon)
-	{
-		LocalLastWeapon = CurrentWeapon;
-	}
-
-	if (LocalLastWeapon)
-	{
-		LocalLastWeapon->OnUnEquip();
-	}
-
-	CurrentWeapon = NewWeapon;
-
-	if (NewWeapon)
-	{
-		NewWeapon->SetOwningPawn(this);
-		NewWeapon->OnEquip(LastWeapon);
-	}
-}
-
-void AABCharacter::EquipWeapon(AABWeapon* Weapon)
-{
-	if (Weapon)
-	{
-		SetCurrentWeapon(Weapon, CurrentWeapon);
-	}
-}
-
-void AABCharacter::SpawnDefaultInventory()
-{
-	int32 NumWeaponClasses = DefaultInventoryClasses.Num();
-
-	for (int32 i = 0; i < NumWeaponClasses; i++)
-	{
-		if (DefaultInventoryClasses[i])
-		{
-			FActorSpawnParameters SpawnInfo;
-
-			AABWeapon* NewWeapon = GetWorld()->SpawnActor<AABWeapon>(DefaultInventoryClasses[i], SpawnInfo);
-			NewWeapon->WeaponMesh->SetHiddenInGame(true);
-			AddWeapon(NewWeapon);
-		}
-	}
-
-	if (Inventory.Num() > 0)
-	{
-		EquipWeapon(Inventory[0]);
-	}
-}
 
