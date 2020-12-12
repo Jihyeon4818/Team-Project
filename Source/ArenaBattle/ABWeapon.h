@@ -2,7 +2,7 @@
 
 #include "ArenaBattle.h"
 #include "GameFramework/Actor.h"
-#include "PublicCharacter.h"
+#include "ABCharacter.h"
 #include "Engine.h"
 #include "ABWeapon.generated.h"
 
@@ -16,7 +16,7 @@ public:
 	// Sets default values for this actor's properties
 	AABWeapon(const class FObjectInitializer& ObjectInitializer);
 
-	void SetOwningPawn(APublicCharacter* NewOwner);
+	void SetOwningPawn(AABCharacter* NewOwner);
 
 	void AttachMeshToPawn();
 
@@ -27,6 +27,6 @@ public:
 		USkeletalMeshComponent* WeaponMesh;
 
 protected:
-	class APublicCharacter* MyPawn;
+	class AABCharacter* MyPawn;
 
 };
